@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SitePrompt FeTec — biblioteca gratuita de prompts criada pelos alunos do 2º Desenvolvimento de Sistemas.">
+<title>SitePrompt | FeTec • 2º Desenvolvimento de Sistemas</title>
+<style>
+/* IDENTIDADE FETEC */
+:root{
+  --bg:#06101f; --bg2:#0a1930; --card:#0d1f38; --card2:#122b4a;
+  --text:#f4f8ff; --muted:#aabbd0; --accent:#4da6ff; --accent2:#73c7ff;
+  --border:rgba(255,255,255,.09); --shadow:0 18px 50px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 80% 0%,rgba(77,166,255,.18),transparent 32%),radial-gradient(circle at 0% 20%,rgba(115,199,255,.08),transparent 28%),var(--bg);color:var(--text);line-height:1.5}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.container{width:min(1180px,92%);margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(7,17,31,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav{height:72px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-weight:900;font-size:1.3rem;letter-spacing:-.5px}
+.logo span{color:var(--accent)}
+nav{display:flex;gap:22px}
+nav a{color:var(--muted);text-decoration:none;font-size:.94rem}
+nav a:hover{color:white}
+.hero{padding:85px 0 55px;text-align:center}
+.badge{display:inline-flex;padding:7px 12px;border:1px solid rgba(77,166,255,.25);background:rgba(77,166,255,.08);border-radius:999px;color:#c7e5ff;font-size:.85rem;margin-bottom:18px}
+h1{font-size:clamp(2.4rem,6vw,4.7rem);line-height:1.02;letter-spacing:-3px;max-width:900px;margin:auto}
+.gradient{background:linear-gradient(100deg,var(--accent),#fff 48%,#a98cff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{max-width:700px;margin:22px auto 30px;color:var(--muted);font-size:1.08rem}
+.search{max-width:720px;margin:auto;position:relative}
+.search input{width:100%;padding:17px 20px 17px 48px;border:1px solid var(--border);background:rgba(16,31,51,.9);color:white;border-radius:16px;outline:none;box-shadow:var(--shadow)}
+.search input:focus{border-color:rgba(77,166,255,.55)}
+.search span{position:absolute;left:18px;top:13px;font-size:1.2rem}
+section{padding:38px 0}
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:20px;margin-bottom:20px}
+.section-title h2{font-size:1.65rem}
+.section-title p{color:var(--muted);font-size:.9rem}
+.categories{display:flex;gap:10px;flex-wrap:wrap}
+.cat{padding:10px 14px;border:1px solid var(--border);background:var(--card);color:#dce7f3;border-radius:12px}
+.cat.active,.cat:hover{background:linear-gradient(135deg,rgba(85,214,255,.18),rgba(115,199,255,.10));border-color:rgba(77,166,255,.35)}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:linear-gradient(180deg,rgba(19,38,61,.94),rgba(16,31,51,.94));border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:0 12px 35px rgba(0,0,0,.13);display:flex;flex-direction:column;min-height:275px}
+.icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:rgba(85,214,255,.1);font-size:1.5rem;margin-bottom:15px}
+.card h3{font-size:1.12rem;margin-bottom:7px}
+.card p{color:var(--muted);font-size:.91rem;flex:1}
+.tag{display:inline-block;margin-top:12px;font-size:.75rem;color:#c7e5ff}
+.actions{display:flex;gap:9px;margin-top:18px}
+.btn{border:0;border-radius:11px;padding:11px 13px;font-weight:700}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#73c7ff);color:#04101a}
+.btn.secondary{background:#1a2d45;color:#eaf3fb;border:1px solid var(--border)}
+.empty{display:none;text-align:center;padding:45px;color:var(--muted);grid-column:1/-1}
+.info{background:linear-gradient(135deg,rgba(124,92,255,.13),rgba(77,166,255,.08));border:1px solid var(--border);border-radius:22px;padding:28px;display:grid;grid-template-columns:1.4fr 1fr;gap:25px}
+.info h2{font-size:1.6rem;margin-bottom:9px}.info p{color:var(--muted)}
+.steps{display:grid;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start;background:rgba(7,17,31,.35);padding:12px;border-radius:12px}
+.num{width:28px;height:28px;min-width:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#031019;font-weight:900}
+footer{margin-top:45px;border-top:1px solid var(--border);padding:28px 0;color:var(--muted);text-align:center;font-size:.85rem}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+.modal.open{display:flex}
+.modal-box{width:min(850px,100%);max-height:90vh;overflow:auto;background:#0c1b2d;border:1px solid var(--border);border-radius:22px;padding:24px}
+.modal-head{display:flex;justify-content:space-between;gap:15px;align-items:start;margin-bottom:15px}
+.close{background:transparent;border:0;color:white;font-size:1.5rem}
+textarea{width:100%;min-height:300px;resize:vertical;background:#07111f;color:#dceafa;border:1px solid var(--border);border-radius:14px;padding:16px;outline:none;line-height:1.55}
+.copy-big{margin-top:12px;width:100%;padding:14px}
+.toast{position:fixed;right:20px;bottom:20px;background:#e9fbff;color:#06131c;padding:12px 17px;border-radius:12px;font-weight:800;transform:translateY(120px);transition:.25s;z-index:100}
+.toast.show{transform:translateY(0)}
+
+.fetec-mark{
+  display:inline-grid;place-items:center;width:30px;height:30px;margin-right:7px;
+  border:1px solid rgba(82,229,139,.45);border-radius:9px;
+  background:rgba(82,229,139,.12);color:var(--accent);font-weight:950;
+}
+.fetec-intro{padding-top:5px}
+.fetec-card{
+  position:relative;overflow:hidden;display:flex;gap:22px;align-items:flex-start;
+  padding:28px;border:1px solid rgba(77,166,255,.25);border-radius:24px;
+  background:linear-gradient(135deg,rgba(77,166,255,.10),rgba(13,33,23,.96));
+  box-shadow:0 18px 50px rgba(0,0,0,.20);
+}
+.fetec-card:after{
+  content:"</>";position:absolute;right:25px;bottom:-18px;font-size:6rem;
+  font-weight:900;color:rgba(82,229,139,.045);font-family:monospace;
+}
+.fetec-symbol{
+  width:58px;height:58px;min-width:58px;border-radius:16px;display:grid;place-items:center;
+  background:rgba(82,229,139,.13);border:1px solid rgba(77,166,255,.25);
+  color:var(--accent);font-size:1.7rem;font-weight:900;
+}
+.fetec-label{font-size:.76rem;letter-spacing:1.6px;color:var(--accent);font-weight:900}
+.fetec-card h2{font-size:1.55rem;line-height:1.2;margin:6px 0 10px}
+.fetec-card h2 span{color:var(--accent)}
+.fetec-card p{color:var(--muted);max-width:850px}
+.fetec-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.fetec-pills span{
+  padding:7px 10px;border-radius:999px;background:rgba(6,16,31,.65);
+  border:1px solid rgba(77,166,255,.16);font-size:.78rem;color:#dcecff;
+}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}.info{grid-template-columns:1fr}nav{display:none}}
+@media(max-width:560px){
+.fetec-card{padding:20px;gap:14px}.fetec-symbol{width:46px;height:46px;min-width:46px}.fetec-card h2{font-size:1.25rem}.hero{padding-top:55px}h1{letter-spacing:-1.8px}.grid{grid-template-columns:1fr}.card{min-height:240px}.nav{height:62px}.section-title{align-items:start;flex-direction:column}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container nav">
+    <div class="logo">Prompts</div>
+    <nav>
+      <a href="#prompts">Prompts</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#sobre">Sobre</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="container">
+    <div class="badge">⚡ FeTec 2026 • 2º Desenvolvimento de Sistemas</div>
+    <h1>Crie seu próximo site com um <span class="gradient">prompt.</span></h1>
+    <p>Escolha o tipo de site, copie o prompt e envie para o ChatGPT. Receba uma base completa em HTML, CSS e JavaScript e transforme sua ideia em um projeto.</p>
+    <div class="search">
+      <span>🔎</span>
+      <input id="search" type="search" placeholder="Pesquise por exemplo: biblioteca, loja, escola...">
+    </div>
+  </div>
+</section>
+
+<section class="fetec-intro">
+  <div class="container">
+    <div class="fetec-card">
+      <div class="fetec-symbol">⌘</div>
+      <div>
+        <span class="fetec-label">PROJETO FeTec 2026</span>
+        <h2>Uma ferramenta criada pelos alunos do <span>2º Desenvolvimento de Sistemas</span></h2>
+        <p>
+          Este site foi desenvolvido especialmente para a FeTec pelos alunos do 2º Desenvolvimento de Sistemas,
+          com a proposta de facilitar a criação de sites por meio de prompts prontos, acessíveis e fáceis de utilizar.
+        </p>
+        <div class="fetec-pills">
+          <span>💻 Tecnologia</span>
+          <span>🌱 Inovação</span>
+          <span>🚀 Desenvolvimento</span>
+          <span>🤖 Inteligência Artificial</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="prompts">
+<div class="container">
+  <div class="section-title">
+    <div><h2>Biblioteca de prompts</h2><p>Escolha uma ideia e copie o prompt pronto.</p></div>
+    <span id="count" class="tag"></span>
+  </div>
+  <div class="categories" id="categories"></div>
+  <div class="grid" id="grid"></div>
+</div>
+</section>
+
+<section id="como-funciona">
+<div class="container">
+  <div class="info">
+    <div>
+      <h2>Como criar seu site?</h2>
+      <p>Você não precisa saber programação. O prompt orienta a IA a montar a estrutura e as funcionalidades do projeto.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">1</div><div><b>Escolha</b><br><small>Encontre o tipo de site que deseja.</small></div></div>
+      <div class="step"><div class="num">2</div><div><b>Copie</b><br><small>Clique em “Copiar prompt”.</small></div></div>
+      <div class="step"><div class="num">3</div><div><b>Envie</b><br><small>Cole o texto no ChatGPT.</small></div></div>
+      <div class="step"><div class="num">4</div><div><b>Personalize</b><br><small>Troque nome, cores, imagens e funções.</small></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="sobre">
+<div class="container">
+  <div class="section-title"><div><h2>💡 Dica para criar melhor</h2><p>Quanto mais detalhes você fornecer, mais personalizado será o resultado.</p></div></div>
+  <div class="card" style="min-height:auto">
+    <p>Depois de copiar um prompt, você pode acrescentar informações como nome do projeto, cores desejadas, público, páginas, imagens, botões e funcionalidades. Se a primeira versão não ficar como você imaginou, peça para a IA fazer alterações no mesmo código.</p>
+  </div>
+</div>
+</section>
+</main>
+
+<footer>
+  <div class="container"><b>FeTec 2026</b> • SitePrompt • Criado pelos alunos do <b>2º Desenvolvimento de Sistemas</b></div>
+</footer>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div><h2 id="modalTitle"></h2><p id="modalDesc" class="tag"></p></div>
+      <button class="close" onclick="closeModal()">×</button>
+    </div>
+    <textarea id="modalText" readonly></textarea>
+    <button class="btn primary copy-big" onclick="copyCurrent()">📋 Copiar prompt completo</button>
+  </div>
+</div>
+<div class="toast" id="toast">Prompt copiado!</div>
+
+<script>
+const prompts = [
+{
+ id:1, icon:"🍔", title:"Lanchonete", category:"Comércio",
+ desc:"Site moderno para lanchonete com cardápio, carrinho e pedidos.",
+ prompt:`Crie um site completo e profissional para uma lanchonete chamada "[NOME]". Gere toda a programação em um único arquivo HTML, incluindo CSS e JavaScript. O site deve ser responsivo para celular e computador, ter uma página inicial moderna, cardápio dividido por categorias, imagens dos produtos, preços, botão para adicionar ao carrinho, cálculo automático do total, campo para observações, escolha entre retirada e entrega e uma área de finalização do pedido. Use uma aparência moderna e agradável. Deixe o código organizado e pronto para funcionar ao salvar como index.html.`
+},
+{
+ id:2, icon:"📚", title:"Biblioteca", category:"Educação",
+ desc:"Biblioteca virtual com catálogo, pesquisa e informações dos livros.",
+ prompt:`Crie um site completo em HTML para uma biblioteca chamada "[NOME]". Entregue todo o código em um único arquivo HTML com CSS e JavaScript incorporados. Crie uma página inicial profissional, catálogo de livros com capa, título, autor e categoria, campo de pesquisa, filtros por categoria, seção de livros em destaque, informações sobre a biblioteca e formulário de contato. O layout deve ser responsivo e funcionar muito bem em celulares. Use dados de exemplo para os livros e permita pesquisar e filtrar o catálogo com JavaScript.`
+},
+{
+ id:3, icon:"🏨", title:"Hotel / Pousada", category:"Serviços",
+ desc:"Sistema visual para hotel com quartos, reservas e informações.",
+ prompt:`Crie um site completo e profissional para um hotel ou pousada chamado "[NOME]". Faça tudo em um único arquivo HTML com CSS e JavaScript. Inclua página inicial, apresentação do hotel, quartos com imagens, descrição, capacidade e diária, formulário de reserva com data de entrada e saída, cálculo automático da quantidade de diárias e valor total, área de comodidades, localização e contato. Crie uma interface moderna, responsiva e fácil de usar em celular. Use imagens de exemplo e deixe todos os botões e cálculos funcionando.`
+},
+{
+ id:4, icon:"🏫", title:"Escola", category:"Educação",
+ desc:"Portal escolar com notícias, cursos, eventos e contato.",
+ prompt:`Crie um site completo para uma escola chamada "[NOME DA ESCOLA]". Gere toda a programação em um único arquivo HTML, contendo CSS e JavaScript. O site deve ter início, sobre a escola, cursos ou turmas, professores, notícias, calendário de eventos, projetos, galeria de fotos, localização e contato. Crie uma aparência institucional moderna, limpa e responsiva. Adicione menu de navegação, animações suaves, cards e formulários funcionais. Use informações fictícias como exemplo e deixe tudo pronto para personalização.`
+},
+{
+ id:5, icon:"🛍️", title:"Loja virtual", category:"Comércio",
+ desc:"Loja online com produtos, filtros, carrinho e checkout visual.",
+ prompt:`Crie um site completo de loja virtual chamado "[NOME DA LOJA]". Entregue tudo em um único arquivo HTML com CSS e JavaScript incorporados. Crie página inicial, banner, catálogo de produtos com imagens, nome, preço e desconto, pesquisa, filtros por categoria, carrinho lateral, alteração de quantidade, cálculo do subtotal e total e uma tela de checkout demonstrativa. O site deve ser bonito, moderno, responsivo e funcionar no celular. Não use backend; faça as interações com JavaScript e use produtos fictícios.`
+},
+{
+ id:6, icon:"💈", title:"Barbearia", category:"Serviços",
+ desc:"Página profissional para barbearia com serviços e agendamento.",
+ prompt:`Crie um site profissional e responsivo para uma barbearia chamada "[NOME]". Gere o projeto inteiro em um único arquivo HTML com CSS e JavaScript. Inclua início, apresentação, serviços com preços, profissionais, galeria, horários de funcionamento, localização, contato e um formulário de agendamento com nome, serviço, data e horário. Mostre uma mensagem de confirmação após o envio. Use visual moderno, masculino e elegante, mas sem exagerar nas cores.`
+},
+{
+ id:7, icon:"💅", title:"Salão de beleza", category:"Serviços",
+ desc:"Site elegante com serviços, profissionais e agendamento.",
+ prompt:`Crie um site completo e elegante para um salão de beleza chamado "[NOME]". Coloque toda a programação em um único arquivo HTML com CSS e JavaScript. Inclua página inicial, serviços com preços, profissionais, galeria, depoimentos, horário de funcionamento, localização e formulário de agendamento. Adicione seleção de serviço, profissional, data e horário e mostre confirmação visual. O site deve ser totalmente responsivo e ter uma aparência sofisticada e moderna.`
+},
+{
+ id:8, icon:"💻", title:"Portfólio", category:"Profissional",
+ desc:"Portfólio pessoal para apresentar projetos, habilidades e contato.",
+ prompt:`Crie um portfólio profissional completo para "[NOME]". Gere todo o código em um único arquivo HTML com CSS e JavaScript. Crie seções de apresentação, sobre mim, habilidades, tecnologias, projetos com imagens e descrição, experiências, formação, depoimentos e contato. Inclua navegação suave, animações discretas, cards de projetos e layout totalmente responsivo. Use um design moderno e profissional e deixe campos fáceis de editar.`
+},
+{
+ id:9, icon:"🎓", title:"Projeto escolar", category:"Educação",
+ desc:"Página para apresentar um projeto de escola ou feira de ciências.",
+ prompt:`Crie um site completo para apresentar um projeto escolar chamado "[NOME DO PROJETO]". Gere tudo em um único arquivo HTML com CSS e JavaScript. Inclua capa, objetivo, problema, solução, metodologia, tecnologias utilizadas, integrantes, resultados, galeria, conclusão e contato. Crie uma apresentação visual moderna e profissional, com boa organização para uma feira escolar. O site deve ser responsivo e ter navegação por menu.`
+},
+{
+ id:10, icon:"🌱", title:"Sustentabilidade", category:"Projetos",
+ desc:"Site para projeto ambiental, reciclagem e sustentabilidade.",
+ prompt:`Crie um site completo sobre sustentabilidade chamado "[NOME DO PROJETO]". Gere toda a programação em um único arquivo HTML com CSS e JavaScript. Inclua página inicial, problema ambiental, dados e estatísticas de exemplo, dicas de sustentabilidade, reciclagem, ações da comunidade, mapa ilustrativo, galeria e formulário para registrar uma ação ambiental. Use visual moderno inspirado na natureza, mas profissional. O site deve ser responsivo e todas as interações demonstrativas devem funcionar com JavaScript.`
+},
+{
+ id:11, icon:"🍕", title:"Pizzaria", category:"Comércio",
+ desc:"Cardápio digital com sabores, tamanhos e carrinho.",
+ prompt:`Crie um site completo para uma pizzaria chamada "[NOME]". Gere tudo em um único arquivo HTML, incluindo CSS e JavaScript. Crie página inicial, cardápio de pizzas, categorias, sabores, tamanhos, preços, bebidas e sobremesas. Inclua pesquisa, carrinho de compras, seleção de quantidade, cálculo do total, campo de observação e tela de finalização demonstrativa. O site deve ter aparência moderna, ser responsivo e funcionar perfeitamente no celular.`
+},
+{
+ id:12, icon:"🏋️", title:"Academia", category:"Serviços",
+ desc:"Site de academia com planos, aulas, professores e contato.",
+ prompt:`Crie um site profissional para uma academia chamada "[NOME]". Faça todo o código em um único arquivo HTML com CSS e JavaScript. Inclua página inicial, planos e preços, modalidades, professores, horários das aulas, benefícios, depoimentos, galeria, localização e formulário de contato. Crie cards modernos, navegação suave, animações discretas e layout responsivo para celular e computador.`
+}
+];
+
+const categories = ["Todos", ...new Set(prompts.map(p=>p.category))];
+let activeCategory="Todos", currentPrompt=null;
+
+const catBox=document.getElementById("categories");
+const grid=document.getElementById("grid");
+const search=document.getElementById("search");
+const count=document.getElementById("count");
+
+function renderCategories(){
+  catBox.innerHTML=categories.map(c=>`<button class="cat ${c===activeCategory?'active':''}" onclick="setCategory('${c}')">${c}</button>`).join("");
+}
+function render(){
+  const term=search.value.toLowerCase().trim();
+  const list=prompts.filter(p=>
+    (activeCategory==="Todos" || p.category===activeCategory) &&
+    (`${p.title} ${p.category} ${p.desc}`.toLowerCase().includes(term))
+  );
+  count.textContent=`${list.length} prompt${list.length!==1?'s':''}`;
+  grid.innerHTML=list.length ? list.map(p=>`
+    <article class="card">
+      <div class="icon">${p.icon}</div>
+      <h3>${p.title}</h3>
+      <p>${p.desc}</p>
+      <span class="tag">${p.category}</span>
+      <div class="actions">
+        <button class="btn primary" onclick="copyPrompt(${p.id})">📋 Copiar prompt</button>
+        <button class="btn secondary" onclick="viewPrompt(${p.id})">👁 Ver</button>
+      </div>
+    </article>`).join("") :
+    `<div class="empty" style="display:block">Nenhum prompt encontrado. Tente outra pesquisa.</div>`;
+}
+function setCategory(c){activeCategory=c;renderCategories();render()}
+function getPrompt(id){return prompts.find(p=>p.id===id)}
+async function copyPrompt(id){
+  const p=getPrompt(id);
+  await navigator.clipboard.writeText(p.prompt);
+  showToast("Prompt copiado! Agora é só colar no ChatGPT.");
+}
+function viewPrompt(id){
+  currentPrompt=getPrompt(id);
+  document.getElementById("modalTitle").textContent=currentPrompt.icon+" "+currentPrompt.title;
+  document.getElementById("modalDesc").textContent=currentPrompt.desc;
+  document.getElementById("modalText").value=currentPrompt.prompt;
+  document.getElementById("modal").classList.add("open");
+}
+function closeModal(){document.getElementById("modal").classList.remove("open")}
+async function copyCurrent(){
+  await navigator.clipboard.writeText(document.getElementById("modalText").value);
+  showToast("Prompt copiado!");
+}
+function showToast(msg){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");
+  setTimeout(()=>t.classList.remove("show"),2200);
+}
+search.addEventListener("input",render);
+document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+renderCategories();render();
+</script>
+</body>
+</html>
